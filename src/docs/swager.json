@@ -1,0 +1,381 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "E-commerce API",
+      "version": "1.0.0",
+      "description": "API documentation for the E-commerce backend project"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000",
+        "description": "Local server"
+      }
+    ],
+    "components": {
+      "schemas": {
+        "Product": {
+          "type": "object",
+          "required": ["name", "price"],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The auto-generated id of the product"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the product"
+            },
+            "price": {
+              "type": "number",
+              "description": "The price of the product"
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the product"
+            }
+          },
+          "example": {
+            "id": "d5fE_asz",
+            "name": "PlayStation 5",
+            "price": 499.99,
+            "description": "Next-gen console"
+          }
+        },
+        "Cart": {
+          "type": "object",
+          "required": ["userId", "products"],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The auto-generated id of the cart"
+            },
+            "userId": {
+              "type": "string",
+              "description": "The id of the user"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "The products in the cart"
+            }
+          },
+          "example": {
+            "id": "d5fE_asz",
+            "userId": "60d0fe4f5311236168a109ca",
+            "products": ["60d0fe4f5311236168a109cd", "60d0fe4f5311236168a109ce"]
+          }
+        }
+      }
+    },
+    "tags": [
+      {
+        "name": "Products",
+        "description": "The products managing API"
+      },
+      {
+        "name": "Carts",
+        "description": "The carts managing API"
+      }
+    ],
+    "paths": {
+      "/api/products": {
+        "get": {
+          "summary": "Returns the list of all the products",
+          "tags": ["Products"],
+          "responses": {
+            "200": {
+              "description": "The list of the products",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new product",
+          "tags": ["Products"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "The product was successfully created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Some server error"
+            }
+          }
+        }
+      },
+      "/api/products/{id}": {
+        "get": {
+          "summary": "Get the product by id",
+          "tags": ["Products"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "The product id"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The product description by id",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "The product was not found"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update the product by the id",
+          "tags": ["Products"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "The product id"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "The product was updated",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "The product was not found"
+            },
+            "500": {
+              "description": "Some server error"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Remove the product by id",
+          "tags": ["Products"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "The product id"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The product was deleted"
+            },
+            "404": {
+              "description": "The product was not found"
+            }
+          }
+        }
+      },
+      "/api/carts": {
+        "get": {
+          "summary": "Returns the list of all the carts",
+          "tags": ["Carts"],
+          "responses": {
+            "200": {
+              "description": "The list of the carts",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cart"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new cart",
+          "tags": ["Carts"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "The cart was successfully created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cart"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Some server error"
+            }
+          }
+        }
+      },
+      "/api/carts/{id}": {
+        "get": {
+          "summary": "Get the cart by id",
+          "tags": ["Carts"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "The cart id"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The cart description by id",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cart"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "The cart was not found"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update the cart by the id",
+          "tags": ["Carts"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "The cart id"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "The cart was updated",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cart"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "The cart was not found"
+            },
+            "500": {
+              "description": "Some server error"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Remove the cart by id",
+          "tags": ["Carts"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "The cart id"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The cart was deleted"
+            },
+            "404": {
+              "description": "The cart was not found"
+            }
+          }
+        }
+      }
+    }
+  }
+  
